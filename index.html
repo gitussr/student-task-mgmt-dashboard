@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Task Management Dashboard</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f3f4f6;
+      color: #222;
+      line-height: 1.6;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .header {
+      background: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      margin-bottom: 40px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .header h1 {
+      font-size: 42px;
+      margin-bottom: 10px;
+      color: #111827;
+    }
+
+    .header p {
+      font-size: 18px;
+      color: #6b7280;
+    }
+
+    .student-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+    }
+
+    .student-card {
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      transition: 0.3s ease;
+      border: 1px solid #e5e7eb;
+    }
+
+    .student-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+
+    .card-header {
+      background: #111827;
+      color: #fff;
+      padding: 20px;
+    }
+
+    .card-header h2 {
+      font-size: 26px;
+    }
+
+    .card-body {
+      padding: 25px;
+    }
+
+    .card-body h3 {
+      margin-bottom: 18px;
+      font-size: 20px;
+      color: #111827;
+    }
+
+    .task-list {
+      list-style: none;
+    }
+
+    .task-list li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 14px;
+      color: #4b5563;
+    }
+
+    .task-list li::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: #111827;
+      border-radius: 50%;
+      position: absolute;
+      left: 0;
+      top: 9px;
+    }
+
+    .resource-links {
+      margin-top: 20px;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 20px;
+    }
+
+    .resource-links h4 {
+      margin-bottom: 12px;
+      color: #111827;
+    }
+
+    .resource-links a {
+      display: block;
+      text-decoration: none;
+      background: #f3f4f6;
+      padding: 12px 15px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      color: #111827;
+      transition: 0.3s ease;
+      font-weight: bold;
+    }
+
+    .resource-links a:hover {
+      background: #e5e7eb;
+    }
+
+    .instructions {
+      background: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      margin-top: 50px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .instructions h2 {
+      margin-bottom: 20px;
+      color: #111827;
+      font-size: 32px;
+    }
+
+    .instructions ul {
+      list-style: none;
+    }
+
+    .instructions li {
+      margin-bottom: 15px;
+      color: #4b5563;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .instructions li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #111827;
+      font-weight: bold;
+    }
+
+    @media(max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+
+      .header {
+        padding: 25px;
+      }
+
+      .header h1 {
+        font-size: 30px;
+      }
+
+      .instructions {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <h1>Student Task Management Dashboard</h1>
+      <p>
+        A simple task tracking system for monitoring daily learning activities,
+        assignments, and practical work of students.
+      </p>
+    </div>
+
+    <div class="student-grid" id="studentGrid"></div>
+
+  </div>
+
+  <script>
+    const students = [
+      {
+        name: "Srijita",
+        tasks: [
+          "JavaScript fundamentals",
+          "Basic jQuery with mini applications",
+          "HTML & CSS practice"
+        ]
+      },
+      {
+        name: "Suprabhat",
+        tasks: [
+          "PSD to HTML conversion",
+          "Working on a live project assigned by Samar"
+        ]
+      },
+      {
+        name: "Arnob Biswas",
+        tasks: [
+          "Office job preparation",
+          "Revision of core JavaScript concepts",
+          "Basic API fetching",
+          "Understanding synchronous and asynchronous JavaScript"
+        ]
+      },
+      {
+        name: "Soumik",
+        tasks: [
+          "Portfolio design in Photoshop",
+          "HTML implementation"
+        ]
+      },
+      {
+        name: "Subhasish",
+        tasks: [
+          "HTML & CSS",
+          "Slick Slider",
+          "Carousel integration",
+          "Fixed navigation design",
+          "FancyBox implementation"
+        ]
+      },
+      {
+        name: "Rudra",
+        tasks: [
+          "HTML & CSS practice",
+          "Started learning jQuery",
+          "Currently 1 month into coding"
+        ]
+      },
+      {
+        name: "Soumen",
+        tasks: [
+          "App UI design practice",
+          "Recreating 3 provided layouts"
+        ]
+      },
+      {
+        name: "Anish",
+        tasks: [
+          "App UI design practice",
+          "Recreating 3 provided layouts"
+        ]
+      },
+      {
+        name: "Bibrato",
+        tasks: [
+          "PSD to HTML",
+          "HTML, CSS & basic JavaScript",
+          "Learning jQuery from W3Schools",
+          "Practicing 50 basic jQuery mini projects using ChatGPT"
+        ]
+      },
+      {
+        name: "Apu",
+        tasks: [
+          "PHP & MySQL (1 hour daily)",
+          "WordPress custom theme development from scratch"
+        ]
+      },
+      {
+        name: "Samrit",
+        tasks: [
+          "HTML & CSS training",
+          "Guided by Samar"
+        ]
+      },
+      {
+        name: "Diya",
+        tasks: [
+          "30 minutes typing practice",
+          "1 hour project practice from yellow file",
+          "Recreating all provided files"
+        ]
+      },
+      {
+        name: "Arnob Roy",
+        tasks: [
+          "10 minutes typing practice",
+          "Basic Microsoft Excel",
+          "Teaching his sister basic MS Word"
+        ]
+      },
+      {
+        name: "Rupanjana",
+        tasks: [
+          "30 minutes typing practice",
+          "Guided by Arnob Roy"
+        ]
+      },
+      {
+        name: "Debagnik",
+        tasks: [
+          "30 minutes typing practice",
+          "Basic Excel (IF-ELSE & text functions)",
+          "Solving 30 basic IF-ELSE problems"
+        ],
+        links: [
+          {
+            title: "Excel Practice Sheet",
+            url: "https://docs.google.com/spreadsheets/d/1psH1oRiFFvtOp1vrgw89zBDozXwf488e/edit?usp=sharing&ouid=116117703102152540486&rtpof=true&sd=true"
+          },
+          {
+            title: "IF-ELSE Practice Document",
+            url: "https://docs.google.com/document/d/1wi-6uSfncwRd77k0CCCdFUjEQK2c0iRvgw6xN_8qeRU/edit?usp=sharing"
+          }
+        ]
+      },
+      {
+        name: "Bihan",
+        tasks: [
+          "30 minutes typing practice",
+          "MS Word project from yellow file",
+          "Computer components & number system mathematics from textbook"
+        ]
+      },
+      {
+        name: "Pritha",
+        tasks: [
+          "30 minutes typing practice",
+          "MS Word project from yellow file"
+        ]
+      },
+      {
+        name: "Indrani",
+        tasks: [
+          "30 minutes typing practice",
+          "Paint 3D practice",
+          "Mouse control improvement exercises"
+        ]
+      },
+      {
+        name: "Ankita & Shrestha",
+        tasks: [
+          "20 minutes typing practice each",
+          "Basic Paint practice"
+        ]
+      }
+    ];
+
+    const studentGrid = document.getElementById("studentGrid");
+
+    students.forEach(student => {
+      const card = document.createElement("div");
+      card.classList.add("student-card");
+
+      let taskHTML = "";
+
+      student.tasks.forEach(task => {
+        taskHTML += `<li>${task}</li>`;
+      });
+
+      let linksHTML = "";
+
+      if (student.links) {
+        linksHTML += `
+          <div class="resource-links">
+            <h4>Practice Resources</h4>
+        `;
+
+        student.links.forEach(link => {
+          linksHTML += `
+            <a href="${link.url}" target="_blank">
+              ${link.title}
+            </a>
+          `;
+        });
+
+        linksHTML += `</div>`;
+      }
+
+      card.innerHTML = `
+        <div class="card-header">
+          <h2>${student.name}</h2>
+        </div>
+
+        <div class="card-body">
+          <h3>Current Learning Tasks</h3>
+
+          <ul class="task-list">
+            ${taskHTML}
+          </ul>
+
+          ${linksHTML}
+        </div>
+      `;
+
+      studentGrid.appendChild(card);
+    });
+  </script>
+
+</body>
+</html>
